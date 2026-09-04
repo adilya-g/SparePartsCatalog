@@ -1,0 +1,93 @@
+# Symfony specific
+/.env.local
+/.env.local.php
+/.env.*.local
+/.env.test.local
+/.env.dev.local
+/.env.prod.local
+
+# Symfony secrets
+/config/secrets/
+/config/secrets/prod/prod.decrypt.private.php
+/config/secrets/dev/dev.decrypt.private.php
+/config/secrets/test/test.decrypt.private.php
+
+# Composer
+/vendor/
+composer.lock
+
+# Node
+/node_modules/
+/package-lock.json
+/yarn.lock
+
+# Build & cache
+/var/
+/public/build/
+/public/bundles/
+/public/hot
+/public/storage
+/storage/
+
+# Assets
+/public/assets/
+/assets/vendor/
+
+# Tests
+.phpunit.cache/
+/phpunit.xml
+/.phpunit.result.cache
+
+# IDE
+/.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.phpstorm.meta.php
+/.editorconfig
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads
+/public/uploads/
+/uploads/
+/media/
+
+# Logs
+/logs/
+*.log
+
+# Environment
+.env.dist
+.env.dev
+.env.test
+.env
+.env.backup
+!.env
+!.env.dev
+!.env.test
+
+# Cache
+.cache/
+.tmp/
+.temp/
+
+# Symfony Flex
+.symfony.local.yaml
+.symfony.local.php
+
+# Docker
+/docker-compose.override.yml
+
+# Coverage
+/coverage/
+.php-cs-fixer.cache
