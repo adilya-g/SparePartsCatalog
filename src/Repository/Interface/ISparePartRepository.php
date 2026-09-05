@@ -2,6 +2,7 @@
 
 namespace App\Repository\Interface;
 
+use App\DTO\SearchOptions;
 use App\Entity\SparePart;
 use App\Entity\Tag;
 use App\Enum\SortingType;
@@ -9,7 +10,7 @@ use Doctrine\ORM\QueryBuilder;
 
 interface ISparePartRepository
 {
-    public function getQueryBuilderByTag(Tag $tag, SortingType $sortingType = SortingType::Name, string $sortingType2 = 'ASC'): \Doctrine\ORM\QueryBuilder;
+    public function getQueryBuilder(SearchOptions $options): \Doctrine\ORM\QueryBuilder;
 
     public function getById($value): ?SparePart;
 

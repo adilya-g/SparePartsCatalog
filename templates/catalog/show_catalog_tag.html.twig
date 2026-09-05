@@ -1,69 +1,89 @@
-<form method="get" action="" class="search-and-sort-form">
+{% extends "base.html.twig" %}
 
-    <div class="search-group">
-        <label for="searchQuery">Поиск запчасти</label>
-        <input
-            type="text"
-            id="searchQuery"
-            name="searchQuery"
-            value="{{ form.searchQuery.vars.value }}"
-            placeholder="Введите название или артикул..."
-            class="form-control"
-        >
-        <button type="submit" class="btn-search">Найти</button>
-    </div>
+{% block title %}Поиск запчастей{% endblock %}
 
-    <div class="sort-group">
-        {% if form.tagId.vars.value %}
-            <input type="hidden" name="tagId" value="{{ form.tagId.vars.value }}">
-        {% endif %}
+{% block body %}
+    <form method="get" action="{{ path('show_spare_part_list', {'pagination': pagination}) }}" class="search-and-sort-form mb-4">
+        <div class="input-group input-group-lg mb-3">
+            <span class="input-group-text">Поиск запчасти</span>
+            <input
+                type="text"
+                id="searchQuery"
+                name="searchQuery"
+                value="{{ form.searchQuery.vars.value }}"
+                placeholder="Введите название или артикул..."
+                class="form-control"
+            >
+            <button type="submit" class="btn btn-primary">Найти</button>
+        </div>
 
-        <label for="sortBy">Сортировать по:</label>
-        <select name="sortBy" id="sortBy" onchange="this.form.submit()">
-            <option value="date" {% if form.sortBy.vars.value == 'date' %} selected {% endif %}>
-                Дате добавления
-            </option>
-            <option value="price" {% if form.sortBy.vars.value == 'price' %} selected {% endif %}>
-                Цене
-            </option>
-            <option value="name" {% if form.sortBy.vars.value == 'name' %} selected {% endif %}>
-                Названию
-            </option>
-        </select>
+        <div class="row g-3 align-items-end mb-4">
+            {% if form.tagId.vars.value %}
+                <input type="hidden" name="tagId" value="{{ form.tagId.vars.value }}">
+            {% endif %}
 
-        <label for="sortOrder" class="visually-hidden">Направление</label>
-        <select name="sortOrder" id="sortOrder" onchange="this.form.submit()">
-            <option value="ASC" {% if form.sortOrder.vars.value == 'ASC' %} selected {% endif %}>
-                Возрастанию (А-Я / Сначала дешевые)
-            </option>
-            <option value="DESC" {% if form.sortOrder.vars.value == 'DESC' %} selected {% endif %}>
-                Убыванию (Я-А / Сначала дорогие)
-            </option>
-        </select>
-    </div>
+            <div class="col-auto">
+                <label for="sortBy" class="form-label">Сортировать по:</label>
+                <select class="form-select" name="sortBy" id="sortBy" onchange="this.form.submit()">
+                    <option value="date" {% if form.sortBy.vars.value == 'date' %} selected {% endif %}>
+                        Дате добавления
+                    </option>
+                    <option value="price" {% if form.sortBy.vars.value == 'price' %} selected {% endif %}>
+                        Цене
+                    </option>
+                    <option value="name" {% if form.sortBy.vars.value == 'name' %} selected {% endif %}>
+                        Названию
+                    </option>
+                </select>
+            </div>
 
-    <noscript>
-        <button type="submit">Применить</button>
-    </noscript>
-</form>
-
-<div class="parts-grid">
-    {% for item in pagination %}
-        <div class="card">
-            <img class="card-img-top" src="{{ item.imagePath ?: '/images/no-photo.png' }}" alt="Фото: {{ item.name }}">
-            <div class="card-body">
-                <a href="#">
-                    <h4>{{ item.name }}</h4>
-                </a>
-                <p>Артикул: {{ item.articleNumber }}</p>
-                <p>Производитель: {{ item.manufacturer }}</p>
-                <br>
-                <h3>{{ item.price }} ₽</h3>
+            <div class="col-auto">
+                <label for="sortOrder" class="visually-hidden">Направление</label>
+                <select class="form-select" name="sortOrder" id="sortOrder" onchange="this.form.submit()">
+                    <option value="ASC" {% if form.sortOrder.vars.value == 'ASC' %} selected {% endif %}>
+                        Возрастанию (А-Я / Сначала дешевые)
+                    </option>
+                    <option value="DESC" {% if form.sortOrder.vars.value == 'DESC' %} selected {% endif %}>
+                        Убыванию (Я-А / Сначала дорогие)
+                    </option>
+                </select>
             </div>
         </div>
-    {% else %}
-        <div class="no-results">
-            <p>По вашему запросу ничего не найдено. Попробуйте изменить параметры поиска.</p>
+
+        <noscript>
+            <button type="submit" class="btn btn-secondary">Применить</button>
+        </noscript>
+    </form>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for item in pagination %}
+            <div class="col">
+                <div class="card h-100">
+                    {# <img class="card-img-top" src="{{ item.imagePath ?: '/images/no-photo.png' }}" alt="Фото: {{ item.name }}"> #}
+                    <div class="card-body">
+                        <a href="#" class="text-decoration-none">
+                            <h4 class="card-title">{{ item.name }}</h4>
+                        </a>
+                        <p class="card-text">
+                            <strong>Артикул:</strong> {{ item.articleNumber }}<br>
+                            <strong>Производитель:</strong> {{ item.manufacturer }}
+                        </p>
+                        <h3 class="text-primary">{{ item.price }} ₽</h3>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <p class="mb-0">По вашему запросу ничего не найдено. Попробуйте изменить параметры поиска.</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% if pagination is defined %}
+        <div class="navigation mt-4">
+            {{ knp_pagination_render(pagination) }}
         </div>
-    {% endfor %}
-</div>
+    {% endif %}
+
+{% endblock %}

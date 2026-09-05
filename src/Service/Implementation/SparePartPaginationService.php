@@ -2,6 +2,7 @@
 
 namespace App\Service\Implementation;
 
+use App\DTO\SearchOptions;
 use App\Enum\SortingType;
 use App\Repository\Interface\ISparePartRepository;
 use App\Repository\Interface\ITagRepository;
@@ -18,10 +19,9 @@ class SparePartPaginationService implements ISparePartPaginationService
 
     }
 
-    public function paginate(int $tagId, SortingType $sortingType = SortingType::Name, string $sortingType2 = 'ASC', int $page = 1, int $perPage = 16): PaginationInterface
+    public function paginate(SearchOptions $options): PaginationInterface
     {
-        $tag = $this->tagRepository->getById($tagId);
-        $queryBuilder = $this->sparePartRepository->getQueryBuilderByTag($tag, $sortingType, $sortingType2);
-        return $this->paginator->paginate($queryBuilder, $page, $perPage);
+        $queryBuilder = $this->sparePartRepository->getQueryBuilder($options);
+        return $this->paginator->paginate($queryBuilder, $options->page, $options->perPage);
     }
 }
