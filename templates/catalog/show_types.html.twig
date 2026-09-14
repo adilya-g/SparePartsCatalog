@@ -1,0 +1,27 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Поиск запчастей{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% if typesList is empty %}
+            <h2>Ничего не найдено</h2>
+        {% else %}
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for item in typesList %}
+                    <div class="col">
+                        <div class="card h-100 shadow bg-body rounded">
+                            <div class="card-body">
+                                <h3>
+                                    <a href="{{ path('show_spare_part_list', { 'combineId': combineId, 'typeId': item.id }) }}">
+                                        <h4>{{ item.name }}</h4>
+                                    </a>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

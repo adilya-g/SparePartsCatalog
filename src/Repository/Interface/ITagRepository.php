@@ -16,4 +16,5 @@ interface ITagRepository
 
     public function getById($value): ?Tag;
 
+    public function findAll(): array;
 }

@@ -20,9 +20,25 @@ class SearchOptionsType extends AbstractType
                 'label' => 'Поиск',
                 'attr' => ['placeholder' => 'Введите текст для поиска...'],
             ])
-            ->add('tagId', IntegerType::class, [
+            ->add('combineName', TextType::class, [
                 'required' => false,
-                'label' => 'ID тега',
+                'label' => 'Имя комбайна',
+            ])
+            ->add('typeId', IntegerType::class, [
+                'required' => false,
+                'label' => 'ID типа',
+            ])
+            ->add('typeName', TextType::class, [
+                'required' => false,
+                'label' => 'Название тэга',
+            ])
+            ->add('tagIdList', ChoiceType::class, [
+                'required' => false,
+                'label' => 'ID тегов',
+            ])
+            ->add('combineId', IntegerType::class, [
+                'required' => false,
+                'label' => 'ID комбайна',
             ])
             ->add('sortBy', ChoiceType::class, [
                 'choices' => [
@@ -38,6 +54,7 @@ class SearchOptionsType extends AbstractType
                     'По убыванию' => 'DESC',
                 ],
                 'label' => 'Направление сортировки',
+                'empty_data' => 'ASC',
             ])
         ;
     }

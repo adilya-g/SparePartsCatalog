@@ -42,10 +42,24 @@ class SparePartRepository extends ServiceEntityRepository implements ISparePartR
                 ->setParameter('searchQuery', '%' . $options->searchQuery . '%');
         }
 
-        if ($options->tagId !== null) {
-            $queryBuilder->innerJoin('s.tags', 't')
-                ->andWhere('t.id = :tagId')
-                ->setParameter('tagId', $options->tagId);
+        if ($options->tagIdList !== null) {
+            $queryBuilder
+                ->innerJoin('s.Tags', 't')
+                ->andWhere('t.id IN (:tagIdList)')
+                ->setParameter('tagIdList', $options->tagIdList);
+        }
+
+        if ($options->typeId !== null) {
+            $queryBuilder
+                ->innerJoin('s.type', 't')
+                ->andWhere('t.id = :typeId')
+                ->setParameter('typeId', $options->typeId);
+        }
+
+        if ($options->combineId !== null) {
+            $queryBuilder
+                ->andWhere('s.combine = :combineId')
+                ->setParameter('combineId', $options->combineId);
         }
 
         $allowedSortFields = ['date' => 's.createdAt', 'price' => 's.price', 'name' => 's.name'];

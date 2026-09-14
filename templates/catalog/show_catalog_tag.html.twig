@@ -3,9 +3,10 @@
 {% block title %}Поиск запчастей{% endblock %}
 
 {% block body %}
+<div class="container">
     <form method="get" action="{{ path('show_spare_part_list', {'pagination': pagination}) }}" class="search-and-sort-form mb-4">
+        <h2 class="fw-bold text-primary" >Поиск запчастей</h2>
         <div class="input-group input-group-lg mb-3">
-            <span class="input-group-text">Поиск запчасти</span>
             <input
                 type="text"
                 id="searchQuery"
@@ -18,12 +19,8 @@
         </div>
 
         <div class="row g-3 align-items-end mb-4">
-            {% if form.tagId.vars.value %}
-                <input type="hidden" name="tagId" value="{{ form.tagId.vars.value }}">
-            {% endif %}
-
             <div class="col-auto">
-                <label for="sortBy" class="form-label">Сортировать по:</label>
+                <label for="sortBy" class="form-label fw-bold text-primary"><h4>Сортировать по:</h4></label>
                 <select class="form-select" name="sortBy" id="sortBy" onchange="this.form.submit()">
                     <option value="date" {% if form.sortBy.vars.value == 'date' %} selected {% endif %}>
                         Дате добавления
@@ -37,6 +34,7 @@
                 </select>
             </div>
 
+
             <div class="col-auto">
                 <label for="sortOrder" class="visually-hidden">Направление</label>
                 <select class="form-select" name="sortOrder" id="sortOrder" onchange="this.form.submit()">
@@ -46,6 +44,44 @@
                     <option value="DESC" {% if form.sortOrder.vars.value == 'DESC' %} selected {% endif %}>
                         Убыванию (Я-А / Сначала дорогие)
                     </option>
+                </select>
+            </div>
+
+            <div class="col-auto">
+                <label for="combineId" class="form-label text-primary">Комбайн</label>
+                <select class="form-select" name="combineId" id="combineId" onchange="this.form.submit()">
+                    <option value="" {% if form.typeId.vars.value is null or form.typeId.vars.value == '' %} selected {% endif %}>Пусто</option>
+                    {% for combine in combineList %}
+                        <option value="{{ combine.id }}" {% if form.combineId.vars.value == combine.id %} selected {% endif %}>
+                            {{ combine.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-auto">
+                <label for="tagId" class="form-label text-primary">Тип</label>
+                <select class="form-select" name="typeId" id="typeId" onchange="this.form.submit()">
+                    <option value="" {% if form.typeId.vars.value is null or form.typeId.vars.value == '' %} selected {% endif %}>Пусто</option>
+                    {% for type in typeList %}
+                        <option value="{{ type.id }}" {% if form.typeId.vars.value %} selected {% endif %}>
+                            {{ type.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-auto">
+                <label for="tagId" class="form-label text-primary">Тэги</label>
+                <select
+                    id="tagsMultiSelect"
+                    class="form-select"
+                    onchange="this.form.submit()">
+                    {% for tag in tagList %}
+                        <option value="{{ tag.id }}" {% if tag.id in form.tagIdList.vars.value %} selected {% endif %}">
+                            {{ tag.name }}
+                        </option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
@@ -58,7 +94,7 @@
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for item in pagination %}
             <div class="col">
-                <div class="card h-100">
+                <div class="card h-100 shadow bg-body rounded">
                     {# <img class="card-img-top" src="{{ item.imagePath ?: '/images/no-photo.png' }}" alt="Фото: {{ item.name }}"> #}
                     <div class="card-body">
                         <a href="#" class="text-decoration-none">
@@ -85,5 +121,32 @@
             {{ knp_pagination_render(pagination) }}
         </div>
     {% endif %}
+</div>
+{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tagsMultiSelect = document.getElementById('tagsMultiSelect');
+
+            if (tagsMultiSelect && typeof coreui !== 'undefined' && coreui.MultiSelect) {
+                const options = Array.from(tagsMultiSelect.options).map(option => ({
+                    value: option.value,
+                    label: option.text,
+                    selected: option.selected
+                }));
+
+                new coreui.MultiSelect(tagsMultiSelect, {
+                    options: options,
+                    search: true,
+                    selectionType: 'tags',
+                    placeholder: 'Выберите теги...',
+                    onChange: function() {
+                        this.form.submit();
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}

@@ -9,7 +9,11 @@ class SearchOptions
 {
     #[Assert\Length(min: 1, max: 250)]
     public ?string $searchQuery = null;
-    public ?int $tagId = null;
+    public ?string $combineName = null;
+    public ?string $typeName = null;
+    public ?int $typeId = null;
+    public ?array $tagIdList = null;
+    public ?int $combineId = null;
     #[Assert\Choice(choices: ['ASC', 'DESC'])]
     public ?string $sortOrder = 'ASC';
     #[Assert\Choice(choices: ['date', 'price', 'name'])]

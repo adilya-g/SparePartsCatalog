@@ -22,6 +22,6 @@ class SparePartPaginationService implements ISparePartPaginationService
     public function paginate(SearchOptions $options): PaginationInterface
     {
         $queryBuilder = $this->sparePartRepository->getQueryBuilder($options);
-        return $this->paginator->paginate($queryBuilder, $options->page, $options->perPage);
+        return $this->paginator->paginate($queryBuilder, $options->page ?? 1, $options->perPage ?? 12);
     }
 }

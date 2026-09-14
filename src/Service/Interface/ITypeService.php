@@ -4,7 +4,7 @@ namespace App\Service\Interface;
 
 use App\Entity\Tag;
 
-interface ITagService
+interface ITypeService
 {
     public function create(Tag $tag): bool;
     public function update(Tag $tag): bool;

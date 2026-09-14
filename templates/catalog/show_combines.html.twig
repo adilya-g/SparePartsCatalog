@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Поиск запчастей{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% if combinesList is empty %}
+            <h2>Ничего не найдено</h2>
+        {% else %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for item in combinesList %}
+                <div class="col">
+                    <div class="card h-100 shadow bg-body rounded">
+                        <div class="card-body">
+                            <a href="{{ path('show_types_list', { 'combineId': item.id }) }}">
+                                <h4>{{ item.name }}</h4>
+                            </a>
+                            <p class="card-text">
+                                <p>Модель: {{ item.model }}</p>
+                                <p>Производитель: {{ item.manufacturer ?? 'Неизвестен' }}</p>
+                                <p>Описание: {{ item.description }}</p>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -54,4 +54,9 @@ class CombineService implements ICombineService
     {
         // TODO: Implement getById() method.
     }
+
+    public function getAll(): array
+    {
+        return $this->combineRepository->findAll();
+    }
 }

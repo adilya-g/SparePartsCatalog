@@ -36,7 +36,6 @@ class SparePart
 
     #[ORM\Column]
     private ?int $quantity = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -54,6 +53,10 @@ class SparePart
      */
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'spareParts')]
     private Collection $Tags;
+
+    #[ORM\ManyToOne]
+    private ?Type $type = null;
+
 
     public function __construct()
     {
@@ -217,6 +220,18 @@ class SparePart
     public function removeTag(Tag $tag): static
     {
         $this->Tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getType(): ?Type
+    {
+        return $this->type;
+    }
+
+    public function setType(?Type $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }
